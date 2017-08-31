@@ -7,6 +7,8 @@ import Goods from 'components/goods/goods'
 import Ratings from 'components/ratings/ratings'
 import Seller from 'components/seller/seller'
 
+import 'common/stylus/index.styl'
+
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
@@ -14,6 +16,7 @@ Vue.use(VueRouter)
 let router = new VueRouter({
   mode: 'history',
   routes: [
+    { path: '/', redirect: '/goods' },
     {
       path: '/goods',
       component: Goods
