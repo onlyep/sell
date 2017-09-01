@@ -22,9 +22,28 @@
 
 <script type="text/ecmascript-6">
 import header from 'components/header/header'
+
+const ERR_OK = 0
+
 export default {
   components: {
     'v-header': header
+  },
+  data () {
+    return {
+      seller: {}
+    }
+  },
+  created () {
+    this.$http.get('/api/seller').then(response => {
+      // get body data
+      response = response.body
+      if (response.errno === ERR_OK) {
+        return
+      }
+    }, response => {
+      // error callback
+    })
   }
 }
 </script>
@@ -37,8 +56,7 @@ export default {
     width 100%
     height 40px
     line-height 40px
-    //border-bottom 1px solid rgba(7,17,27, .1)
-    border-1px(rgba(7,17,27, .1))
+    //border-1px(rgba(7,17,27, .1))
     .tab-item
       flex 1
       text-align center
