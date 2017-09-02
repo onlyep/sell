@@ -30,21 +30,28 @@
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
-    <div v-show="detailShow" class="detail" @click="hideDetail">
+    <div v-show="detailShow" class="detail">
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :size="48" :score="seller.score"></star>
+          </div>
         </div>
       </div>
       <div class="detail-close">
-        <i class="icon-close"></i>
+        <i class="icon-close" @click="hideDetail"></i>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import star from '../../components/star/star'
 export default {
+  components: {
+    star
+  },
   props: {
     seller: {
       type: Object
@@ -70,6 +77,7 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+
   @import "../../common/stylus/mixin.styl"
 
   .header
@@ -84,7 +92,7 @@ export default {
       .avatar
         display inline-block
         vertical-align top
-        img 
+        img
           border-radius 2px
       .content
         display inline-block
@@ -105,7 +113,7 @@ export default {
             line-height 18px
             font-weight bold
         .description
-          margin-bottom 10px 
+          margin-bottom 10px
           line-height 12px
           font-size 12px
         .support
@@ -116,7 +124,7 @@ export default {
           height 12px
           margin-right 4px
           background-size 12px 12px
-          background-repeat no-repeat 
+          background-repeat no-repeat
           &.decrease
             bg-image('decrease_1')
           &.discount
@@ -199,6 +207,10 @@ export default {
             text-align center
             font-size 16px
             font-weight 700
+          .star-wrapper
+            margin-top 18px
+            padding 2px 0
+            text-align center
       .detail-close
         position relative
         width 32px

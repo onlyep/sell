@@ -4,9 +4,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import App from './App'
-import Goods from 'components/goods/goods'
-import Ratings from 'components/ratings/ratings'
-import Seller from 'components/seller/seller'
+import goods from 'components/goods/goods'
+import ratings from 'components/ratings/ratings'
+import seller from 'components/seller/seller'
 
 import 'common/stylus/index.styl'
 
@@ -21,15 +21,15 @@ let router = new VueRouter({
     { path: '/', redirect: '/goods' },
     {
       path: '/goods',
-      component: Goods
+      component: goods
     },
     {
       path: '/ratings',
-      component: Ratings
+      component: ratings
     },
     {
       path: '/seller',
-      component: Seller
+      component: seller
     }
   ]
 })
