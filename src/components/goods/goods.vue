@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuWrapper">
       <ul>
         <li v-for="item in goods" class="menu-item">
           <span class="text border-1px">
@@ -9,7 +9,7 @@
         </li>
       </ul>
     </div>
-    <div class="goods-wrapper">
+    <div class="goods-wrapper" ref="goodsWrapper">
       <ul>
         <li v-for="item in goods" class="food-list">
           <h1 class="title">{{item.name}}</h1>
@@ -20,7 +20,7 @@
               </div>
               <div class="content">
                 <h2 class="name">{{food.name}}</h2>
-                <p class="des">{{food.description}}</p>
+                <p class="desc">{{food.description}}</p>
                 <div class="extra">
                   <span class="count">月售{{food.sellCount}}份</span>
                   <span>好评率{{food.rating}}%</span>
@@ -39,6 +39,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll'
 
 const ERR_OK = 0
 
@@ -62,11 +63,21 @@ export default {
       if (response.errno === ERR_OK) {
         console.log(response)
         this.goods = response.data
+
+        this.$nextTick(() => {
+          this._initScroll()
+        })
         return
       }
     }, response => {
       // error callback
     })
+  },
+  methods: {
+    _initScroll() {
+      this.menuScroll = new BScroll(this.$refs.menuWrapper, {})
+      this.foodsScroll = new BScroll(this.$refs.goodsWrapper, {})
+    }
   }
 }
 </script>
@@ -145,14 +156,14 @@ export default {
             line-height 14px
             font-size 14px
             color rgb(7,17,27)
-          .des,.extra
+          .desc,.extra
             line-height 10px
             font-size 10px
             color rgb(147,153,159)
-          .des
+          .desc
             margin-bottom 8px
           .extra
-            &.count
+            .count
               margin-right 12px
           .price
             line-height 24px
