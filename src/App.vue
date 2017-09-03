@@ -39,7 +39,7 @@ export default {
       // get body data
       response = response.body
       if (response.errno === ERR_OK) {
-        console.log(response)
+       // console.log(response)
         this.seller = response.data
         return
       }
