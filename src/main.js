@@ -18,7 +18,7 @@ Vue.use(VueResource)
 let router = new VueRouter({
   mode: 'history',
   routes: [
-    { path: '/', redirect: '/goods' },
+    {path: '/', redirect: '/goods'},
     {
       path: '/goods',
       component: goods
@@ -39,5 +39,5 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })

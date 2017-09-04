@@ -21,33 +21,33 @@
 </template>
 
 <script type="text/ecmascript-6">
-import header from 'components/header/header'
+  import header from 'components/header/header'
 
-const ERR_OK = 0
+  const ERR_OK = 0
 
-export default {
-  components: {
-    'v-header': header
-  },
-  data() {
-    return {
-      seller: {}
-    }
-  },
-  created() {
-    this.$http.get('/api/seller').then(response => {
-      // get body data
-      response = response.body
-      if (response.errno === ERR_OK) {
-       // console.log(response)
-        this.seller = response.data
-        return
+  export default {
+    components: {
+      'v-header': header
+    },
+    data () {
+      return {
+        seller: {}
       }
-    }, response => {
-      // error callback
-    })
+    },
+    created () {
+      this.$http.get('/api/seller').then(response => {
+        // get body data
+        response = response.body
+        if (response.errno === ERR_OK) {
+          // console.log(response)
+          this.seller = response.data
+          return
+        }
+      }, response => {
+        // error callback
+      })
+    }
   }
-}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -58,14 +58,14 @@ export default {
     width 100%
     height 40px
     line-height 40px
-    border-1px(rgba(7,17,27, .1))
+    border-1px(rgba(7, 17, 27, .1))
     .tab-item
       flex 1
       text-align center
       & > a
         display block
         font-size 14px
-        color rgb(77,85,93)
+        color rgb(77, 85, 93)
         &.active
-          color rgb(240,20,20)
+          color rgb(240, 20, 20)
 </style>

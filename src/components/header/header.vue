@@ -31,70 +31,71 @@
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
     <transition name="fade">
-    <div v-if="detailShow" class="detail">
-      <div class="detail-wrapper clearfix">
-        <div class="detail-main">
-          <h1 class="name">{{seller.name}}</h1>
-          <div class="star-wrapper">
-            <star :size="48" :score="seller.score"></star>
-          </div>
-          <div class="title">
-            <div class="line"></div>
-            <div class="text">优惠信息</div>
-            <div class="line"></div>
-          </div>
-          <ul class="supports" v-if="seller.supports">
-            <li class="support-item" v-for="item in seller.supports">
-              <span class="icon" :class="classMap[item.type]"></span>
-              <span class="text">{{item.description}}</span>
-            </li>
-          </ul>
-          <div class="title">
-            <div class="line"></div>
-            <div class="text">商家公告</div>
-            <div class="line"></div>
-          </div>
-          <div class="bulletin">
-            <p class="content">{{seller.bulletin}}</p>
+      <div v-if="detailShow" class="detail">
+        <div class="detail-wrapper clearfix">
+          <div class="detail-main">
+            <h1 class="name">{{seller.name}}</h1>
+            <div class="star-wrapper">
+              <star :size="48" :score="seller.score"></star>
+            </div>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <ul class="supports" v-if="seller.supports">
+              <li class="support-item" v-for="item in seller.supports">
+                <span class="icon" :class="classMap[item.type]"></span>
+                <span class="text">{{item.description}}</span>
+              </li>
+            </ul>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="bulletin">
+              <p class="content">{{seller.bulletin}}</p>
+            </div>
           </div>
         </div>
+        <div class="detail-close">
+          <i class="icon-close" @click="hideDetail"></i>
+        </div>
       </div>
-      <div class="detail-close">
-        <i class="icon-close" @click="hideDetail"></i>
-      </div>
-    </div>
     </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import star from '../../components/star/star'
-export default {
-  components: {
-    star
-  },
-  props: {
-    seller: {
-      type: Object
-    }
-  },
-  data() {
-    return {
-      detailShow: false
-    }
-  },
-  methods: {
-    showDetail() {
-      this.detailShow = true
+  import star from '../../components/star/star'
+
+  export default {
+    components: {
+      star
     },
-    hideDetail() {
-      this.detailShow = false
+    props: {
+      seller: {
+        type: Object
+      }
+    },
+    data () {
+      return {
+        detailShow: false
+      }
+    },
+    methods: {
+      showDetail () {
+        this.detailShow = true
+      },
+      hideDetail () {
+        this.detailShow = false
+      }
+    },
+    created () {
+      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     }
-  },
-  created() {
-    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
   }
-}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -104,7 +105,7 @@ export default {
   .header
     position relative
     color #fff
-    background rgba(7,17,27,.4)
+    background rgba(7, 17, 27, .4)
     overflow hidden
     .content-wrapper
       position relative
@@ -138,24 +139,24 @@ export default {
           line-height 12px
           font-size 12px
         .support
-         .icon
-          display inline-block
-          vertical-align top
-          width 12px
-          height 12px
-          margin-right 4px
-          background-size 12px 12px
-          background-repeat no-repeat
-          &.decrease
-            bg-image('decrease_1')
-          &.discount
-            bg-image('discount_1')
-          &.guarantee
-            bg-image('guarantee_1')
-          &.invoice
-            bg-image('invoice_1')
-          &.special
-            bg-image('special_1')
+          .icon
+            display inline-block
+            vertical-align top
+            width 12px
+            height 12px
+            margin-right 4px
+            background-size 12px 12px
+            background-repeat no-repeat
+            &.decrease
+              bg-image('decrease_1')
+            &.discount
+              bg-image('discount_1')
+            &.guarantee
+              bg-image('guarantee_1')
+            &.invoice
+              bg-image('invoice_1')
+            &.special
+              bg-image('special_1')
         .text
           line-height 12px
           font-size 12px
@@ -167,7 +168,7 @@ export default {
         height 24px
         line-height 24px
         border-radius 14px
-        background-color rgba(0,0,0,0.2)
+        background-color rgba(0, 0, 0, 0.2)
         text-align cent
         .count
           font-size 10px
@@ -183,7 +184,7 @@ export default {
       white-space nowrap
       overflow hidden
       text-overflow ellipsis
-      background rgba(7,17,27,.2)
+      background rgba(7, 17, 27, .2)
       .bulletin-title
         display inline-block
         vertical-align middle
@@ -216,7 +217,7 @@ export default {
       width 100%
       height 100%
       overflow auto
-      background rgba(7,17,27,.8)
+      background rgba(7, 17, 27, .8)
       backdrop-filter blur(10px)
       &.fade-enter-active, &.fade-leave-active
         transition: opacity .5s
@@ -245,12 +246,12 @@ export default {
               flex 1
               position relative
               top -7px
-              border-bottom 1px solid rgba(255,255,255,.2)
+              border-bottom 1px solid rgba(255, 255, 255, .2)
             .text
               padding 0 12px
               font-size 14px
               font-weight 700
-              color rgb(255,255,255)
+              color rgb(255, 255, 255)
               line-height 14px
           .supports
             width 80%
@@ -282,7 +283,7 @@ export default {
               .text
                 font-size 12px
                 font-weight 200
-                color rgb(255,255,255)
+                color rgb(255, 255, 255)
                 line-height 16px
           .bulletin
             width 80%
@@ -291,7 +292,7 @@ export default {
               padding 0 12px
               font-size 12px
               font-weight 200
-              color rgb(255,255,255)    
+              color rgb(255, 255, 255)
               line-height 24px
               text-align justify
       .detail-close
