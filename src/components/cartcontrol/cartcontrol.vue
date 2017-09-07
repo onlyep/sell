@@ -1,6 +1,8 @@
 <template>
   <div class="cartcontrol">
+    <transition name="fade">
     <div class="cart-decrease icon-remove_circle_outline" v-show="food.count>0" @click="decreaseCart"></div>
+    </transition>
     <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
     <div class="cart-add icon-add_circle" @click="addCart"></div>
   </div>
@@ -55,5 +57,11 @@
       color: rgb(147, 153, 159)
     .cart-add
       display: inline-block
-
+    .fade-enter-active
+      transition: all .3s ease
+    .fade-leave-active
+      transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0)
+    .fade-enter, .fade-leave-to
+      transform: translateX(30px)
+      opacity: 0
 </style>
