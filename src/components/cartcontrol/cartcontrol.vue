@@ -58,10 +58,10 @@
     .cart-add
       display: inline-block
     .fade-enter-active
-      transition: all .3s ease
+      transition: all .4s ease
     .fade-leave-active
-      transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0)
+      transition: all .4s ease
     .fade-enter, .fade-leave-to
-      transform: translateX(30px)
+      transform: translate3d(30px,0,0) rotate(180deg)
       opacity: 0
 </style>
