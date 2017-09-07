@@ -16,6 +16,9 @@
           {{payDesc}}
         </div>
       </div>
+      <div class="ball-container">
+        <div v-for="ball in balls" v-show="ball.show" class="ball"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +39,27 @@
       minPrice: {
         type: Number,
         default: 0
+      }
+    },
+    data () {
+      return {
+        balls: [
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          }
+        ]
       }
     },
     computed: {
