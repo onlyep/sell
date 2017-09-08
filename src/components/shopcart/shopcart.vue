@@ -83,7 +83,7 @@
         } else if (this.totalPrice < this.minPrice) {
           let diff = this.minPrice - this.totalPrice
           return `还差￥${diff}元起送`
-        } else {
+        } else if (this.totalPrice >= this.minPrice) {
           return `去结算`
         }
       },

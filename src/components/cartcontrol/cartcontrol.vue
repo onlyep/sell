@@ -62,6 +62,6 @@
     .fade-leave-active
       transition: all .4s ease
     .fade-enter, .fade-leave-to
-      transform: translate3d(30px,0,0) rotate(180deg)
+      transform: translate3d(30px,0,0) rotate(360deg)
       opacity: 0
 </style>
