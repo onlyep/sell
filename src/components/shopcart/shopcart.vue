@@ -66,6 +66,9 @@
         dropBalls: []
       }
     },
+    created () {
+      this.$root.eventHub.$on('cart.add', this.drop)
+    },
     computed: {
       totalPrice () {
         let total = 0
