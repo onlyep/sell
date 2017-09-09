@@ -36,8 +36,12 @@ let router = new VueRouter({
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
   template: '<App/>',
-  components: {App}
-})
+  components: {
+    App
+  },
+  data: {
+    eventHub: new Vue() // 给data添加一个 名字为eventHub 的空vue对象,用来传输非父子组件的数据
+  }
+}).$mount('#app') // 手动挂载，#app
