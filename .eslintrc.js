@@ -22,7 +22,10 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
-    //"space-before-function-paren": ["error", "never"]
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    "no-trailing-spaces": 1,// 一行结束后面不要有空格
+    "eol-last":0,// 忽略文件以换行符结束
+    "space-before-function-paren":0,// 忽略函数()前面的空格
+    "indent": 0 // 忽略缩进风格
   }
 }

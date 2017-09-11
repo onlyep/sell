@@ -1,147 +1,145 @@
 <template>
-  <div class="goods">
-    <div class="menu-wrapper" ref="menuWrapper">
-      <ul>
-        <li v-for="(item,index) in goods" class="menu-item" :class="{'current': currentIndex === index}"
-            @click="selectMenu(index)">
-          <span class="text border-1px">
+<div class="goods">
+  <div class="menu-wrapper" ref="menuWrapper">
+    <ul>
+      <li v-for="(item,index) in goods" class="menu-item" :class="{'current': currentIndex === index}" @click="selectMenu(index)">
+        <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
-          </span>
-        </li>
-      </ul>
-    </div>
-    <div class="goods-wrapper" ref="goodsWrapper">
-      <ul>
-        <li v-for="item in goods" class="food-list food-list-hook">
-          <h1 class="title">{{item.name}}</h1>
-          <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
-              <div class="icon">
-                <img width="57" height="57" :src="food.icon">
-              </div>
-              <div class="content">
-                <h2 class="name">{{food.name}}</h2>
-                <p class="desc">{{food.description}}</p>
-                <div class="extra">
-                  <span class="count">月售{{food.sellCount}}份</span>
-                  <span>好评率{{food.rating}}%</span>
-                </div>
-                <div class="price">
-                  <span class="now">￥{{food.price}}</span>
-                  <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
-                </div>
-                <div class="cartcontrol-wrapper">
-                  <cart-control :food="food"></cart-control>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <shop-cart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
-               :min-price="seller.minPrice"></shop-cart>
+        </span>
+      </li>
+    </ul>
   </div>
+  <div class="goods-wrapper" ref="goodsWrapper">
+    <ul>
+      <li v-for="item in goods" class="food-list food-list-hook">
+        <h1 class="title">{{item.name}}</h1>
+        <ul>
+          <li v-for="food in item.foods" class="food-item border-1px">
+            <div class="icon">
+              <img width="57" height="57" :src="food.icon">
+            </div>
+            <div class="content">
+              <h2 class="name">{{food.name}}</h2>
+              <p class="desc">{{food.description}}</p>
+              <div class="extra">
+                <span class="count">月售{{food.sellCount}}份</span>
+                <span>好评率{{food.rating}}%</span>
+              </div>
+              <div class="price">
+                <span class="now">￥{{food.price}}</span>
+                <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
+              </div>
+              <div class="cartcontrol-wrapper">
+                <cart-control :food="food"></cart-control>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <shop-cart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shop-cart>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
-  import BScroll from 'better-scroll'
-  import ShopCart from 'components/shopcart/shopcart'
-  import CartControl from 'components/cartcontrol/cartcontrol'
+import BScroll from 'better-scroll'
+import ShopCart from 'components/shopcart/shopcart'
+import CartControl from 'components/cartcontrol/cartcontrol'
 
-  const ERR_OK = 0
+const ERR_OK = 0
 
-  export default {
-    props: {
-      seller: {
-        type: Object
+export default {
+  props: {
+    seller: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      goods: [],
+      listHeight: [],
+      scrollY: 0
+    }
+  },
+  computed: {
+    currentIndex() {
+      for (let i = 0; i < this.listHeight.length; i++) {
+        let height1 = this.listHeight[i]
+        let height2 = this.listHeight[i + 1]
+        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+          return i
+        }
       }
+      return 0
     },
-    data () {
-      return {
-        goods: [],
-        listHeight: [],
-        scrollY: 0
-      }
-    },
-    computed: {
-      currentIndex () {
-        for (let i = 0; i < this.listHeight.length; i++) {
-          let height1 = this.listHeight[i]
-          let height2 = this.listHeight[i + 1]
-          if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-            return i
+    selectFoods() {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
           }
-        }
-        return 0
-      },
-      selectFoods () {
-        let foods = []
-        this.goods.forEach((good) => {
-          good.foods.forEach((food) => {
-            if (food.count) {
-              foods.push(food)
-            }
-          })
         })
-        return foods
+      })
+      return foods
+    }
+  },
+  created() {
+    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+
+    this.$http.get('/api/goods').then(response => {
+      // get body data
+      response = response.body
+      if (response.errno === ERR_OK) {
+        console.log(response)
+        this.goods = response.data
+
+        this.$nextTick(() => {
+          this._initScroll()
+          this._calculateHeigth()
+        })
+        return
       }
+    }, response => {
+      // error callback
+    })
+  },
+  methods: {
+    selectMenu(index) {
+      let foodList = this.$refs.goodsWrapper.getElementsByClassName('food-list-hook')
+      let el = foodList[index]
+      this.foodsScroll.scrollToElement(el, 300)
     },
-    created () {
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+    _initScroll() {
+      this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+        click: true
+      })
+      this.foodsScroll = new BScroll(this.$refs.goodsWrapper, {
+        click: true,
+        probeType: 3
+      })
 
-      this.$http.get('/api/goods').then(response => {
-        // get body data
-        response = response.body
-        if (response.errno === ERR_OK) {
-          console.log(response)
-          this.goods = response.data
-
-          this.$nextTick(() => {
-            this._initScroll()
-            this._calculateHeigth()
-          })
-          return
-        }
-      }, response => {
-        // error callback
+      this.foodsScroll.on('scroll', (pos) => {
+        this.scrollY = Math.abs(Math.round(pos.y))
       })
     },
-    methods: {
-      selectMenu (index) {
-        let foodList = this.$refs.goodsWrapper.getElementsByClassName('food-list-hook')
-        let el = foodList[index]
-        this.foodsScroll.scrollToElement(el, 300)
-      },
-      _initScroll () {
-        this.menuScroll = new BScroll(this.$refs.menuWrapper, {
-          click: true
-        })
-        this.foodsScroll = new BScroll(this.$refs.goodsWrapper, {
-          click: true,
-          probeType: 3
-        })
-
-        this.foodsScroll.on('scroll', (pos) => {
-          this.scrollY = Math.abs(Math.round(pos.y))
-        })
-      },
-      _calculateHeigth () {
-        let foodList = this.$refs.goodsWrapper.getElementsByClassName('food-list-hook')
-        let height = 0
+    _calculateHeigth() {
+      let foodList = this.$refs.goodsWrapper.getElementsByClassName('food-list-hook')
+      let height = 0
+      this.listHeight.push(height)
+      for (let i = 0; i < foodList.length; i++) {
+        let item = foodList[i]
+        height += item.clientHeight
         this.listHeight.push(height)
-        for (let i = 0; i < foodList.length; i++) {
-          let item = foodList[i]
-          height += item.clientHeight
-          this.listHeight.push(height)
-        }
       }
-    },
-    components: {
-      ShopCart,
-      CartControl
     }
+  },
+  components: {
+    ShopCart,
+    CartControl
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

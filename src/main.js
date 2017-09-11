@@ -17,8 +17,10 @@ Vue.use(VueResource)
 
 let router = new VueRouter({
   mode: 'history',
-  routes: [
-    {path: '/', redirect: '/goods'},
+  routes: [{
+      path: '/',
+      redirect: '/goods'
+    },
     {
       path: '/goods',
       component: goods
