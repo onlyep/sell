@@ -18,11 +18,36 @@
             <span class="now">￥{{food.price}}</span>
             <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
           </div>
+          <div class="cartcontrol-wrapper">
+            <v-cartControl :food="food"></v-cartControl>
+          </div>
+          <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count === 0">加入购物车</div>
         </div>
-        <div class="cartcontrol-wrapper">
-          <v-cartControl :food="food"></v-cartControl>
+        <v-split v-show="food.info"></v-split>
+        <div class="info" v-show="food.info">
+          <h1 class="title">商品信息</h1>
+          <p class="text">{{food.info}}</p>
         </div>
-        <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count === 0">加入购物车</div>
+        <v-split></v-split>
+        <div class="rating">
+          <h1 class="title">商品评价</h1>
+          <v-ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></v-ratingselect>
+        </div>
+        <div class="rating-wrapper">
+          <ul v-show="food.ratings && food.ratings.length">
+            <li v-show="needShow(rating.rateType,rating.text)" v-for="(rating, index) in food.ratings" :key="index" class="rating-item border-1px">
+              <div class="user">
+                <span class="name">{{rating.username}}</span>
+                <img class="avater" width="12" height="12" :src="rating.avatar">
+              </div>
+              <div class="time">{{rating.rateTime}}</div>
+              <p class="text">
+                <span :class="{'icon-thumb_up': rating.rateType === 0,'icon-thumb_down': rating.rateType === 1}"></span>{{rating.text}}
+              </p>
+            </li>
+          </ul>
+          <div class="no-rating" v-show="!food.ratings || !food.ratings.length"></div>
+        </div>
       </div>
     </div>
   </transition>
@@ -30,8 +55,14 @@
 
 <script>
 import BScroll from 'better-scroll'
-import CartControl from 'components/cartcontrol/cartcontrol'
 import Vue from 'vue'
+import CartControl from 'components/cartcontrol/cartcontrol'
+import Split from 'components/split/split'
+import RatingSelect from 'components/ratingselect/ratingselect'
+
+// const POSITIVE = 0
+// const NEGATIVE = 1
+const ALL = 2
 
 export default {
   props: {
@@ -40,18 +71,28 @@ export default {
     }
   },
   components: {
-    'v-cartControl': CartControl
+    'v-cartControl': CartControl,
+    'v-split': Split,
+    'v-ratingselect': RatingSelect
   },
   data() {
     return {
-      showFlag: false
+      showFlag: false,
+      selectType: ALL,
+      onlyContent: true,
+      desc: {
+        all: '全部',
+        positive: '推荐',
+        negative: '吐槽'
+      }
     }
   },
   methods: {
     initShow() {
       this.showFlag = true
+      this.selectType = ALL
+      this.onlyContent = true
       this.$nextTick(() => {
-        console.log(this.scroll)
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.foodInfo, {
             click: true
@@ -112,6 +153,7 @@ export default {
           font-size 20px
           color #fff
     .content
+      position relative
       padding 18px
       .title
         line-height 14px
@@ -140,22 +182,78 @@ export default {
           text-decoration line-through
           font-size 10px
           color rgb(147, 153, 159)
-    .cartcontrol-wrapper
-      position absolute
-      right 12px
-      bottom 12px
-    .buy
-      position absolute
-      right 18px
-      bottom 18px
-      z-index 10
-      height 24px
-      line-height 24px
-      padding 0 12px
-      box-sizing border-box
-      border-radius 12px
-      font-size 10px
-      color #fff
-      background rgb(0,160,220)
-      
+      .cartcontrol-wrapper
+        position absolute
+        right 12px
+        bottom 12px
+      .buy
+        position absolute
+        right 18px
+        bottom 18px
+        z-index 10
+        height 24px
+        line-height 24px
+        padding 0 12px
+        box-sizing border-box
+        border-radius 12px
+        font-size 10px
+        color #fff
+        background rgb(0,160,220)
+    .info
+      padding 18px
+      .tltle
+        font-size 14px   
+        color rgb(7,17,27)
+        line-height 14px
+        margin-bottom 6px
+      .text
+        line-height 24px
+        padding  0 8px
+        font-size 12px 
+        font-weight 200
+        color rgb(77,85,93)
+    .rating
+      padding-top 18px
+      .title
+        font-size 14px   
+        color rgb(7,17,27)
+        line-height 14px
+        margin-left 18px
+    .rating-wrapper
+      padding 0 18px
+      .rating-item
+        position relative
+        padding 16px 0
+        border-1px(rgba(7,17,27,0.1))
+        .user
+          position absolute
+          right 0
+          top 16px
+          line-height 12px
+          font-size 0
+          .name
+            display inline-block
+            margin-right 6px
+            vertical-align top 
+            font-size 10px
+            color rgb(147,153,159)
+          .avatar
+            border-radius 50% 
+        .time
+          margin-bottom 6px
+          line-height 12px
+          font-size 10px
+          color rgb(147,153,159)
+        .text
+          line-height 16px
+          font-size 12px
+          color rgb(7,17,27)
+          .icon-thumb_up,.icon-thumb_down
+            margin-right 4px
+            line-height 16px
+            font-size 12px
+          .icon-thumb_up
+            color rgb(0,160,220)
+          .icon-thumb_down
+            color rgb(147,153,159)
 </style>
