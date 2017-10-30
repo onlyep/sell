@@ -11,14 +11,14 @@
         <span class="count">{{negatives.length}}</span>
       </span>
     </div>
-    <div @click="toggleContent" class="switch" :class="{'on': onlyContent}">
+    <div class="switch" :class="{'on': onlyContent}" @click="toggleContent">
       <span class="icon-check_circle"></span>
       <span class="text">只看内容的评价</span>
     </div>
   </div>
 </template>
 
-<script>
+<script text="text/ecmascript6">
 const POSITIVE = 0
 const NEGATIVE = 1
 const ALL = 2
@@ -31,14 +31,6 @@ export default {
         return []
       }
     },
-    selectType: {
-      type: Number,
-      default: ALL
-    },
-    onlyContent: {
-      type: Boolean,
-      default: false
-    },
     desc: {
       type: Object,
       default() {
@@ -47,6 +39,18 @@ export default {
           positive: '满意',
           negative: '不满意'
         }
+      }
+    }
+  },
+  data() {
+    return {
+      onlyContent: {
+        type: Boolean,
+        default: false
+      },
+      selectType: {
+        type: Number,
+        default: ALL
       }
     }
   },
@@ -68,7 +72,7 @@ export default {
         return
       }
       this.selectType = type
-      // 自定义事件，并想父级传输数据
+      // 自定义事件，并向父级传输数据
       this.$emit('selRatings', this.selectType)
     },
     toggleContent(event) {
@@ -76,14 +80,14 @@ export default {
         return
       }
       this.onlyContent = !this.onlyContent
-      // 自定义事件，并想父级传输数据
+      // 自定义事件，并向父级传输数据
       this.$emit('isContent', this.onlyContent)
     }
   }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
 
   .ratingselect

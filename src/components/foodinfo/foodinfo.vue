@@ -31,7 +31,8 @@
         <v-split></v-split>
         <div class="rating">
           <h1 class="title">商品评价</h1>
-          <v-ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></v-ratingselect>
+          <v-ratingselect @isContent="isContent" :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"
+                          @selRatings="filterRatings"></v-ratingselect>
         </div>
         <div class="rating-wrapper">
           <ul v-show="food.ratings && food.ratings.length">
@@ -53,7 +54,7 @@
   </transition>
 </template>
 
-<script>
+<script text="text/ecmascript6">
 import BScroll from 'better-scroll'
 import Vue from 'vue'
 import CartControl from 'components/cartcontrol/cartcontrol'
@@ -111,12 +112,34 @@ export default {
       }
       this.$root.eventHub.$emit('cart.add', event.target)
       Vue.set(this.food, 'count', 1)
+    },
+    filterRatings(type) {
+      this.selectType = type
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
+    },
+    isContent(bl) {
+      this.onlyContent = bl
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
+    },
+    needShow(type, text) {
+      if (this.onlyContent && !text) {
+        return false
+      }
+      if (this.selectType === ALL) {
+        return true
+      } else {
+        return type === this.selectType
+      }
     }
   }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
 
   .food
@@ -129,9 +152,9 @@ export default {
     background #fff
     transition all 0.3s
     &.move-enter-active
-      transform:translate3d(0,0,0)
+      transform translate3d(0,0,0)
     &.move-enter,&.move-leave-to
-      transform:translate3d(100%,0,0)
+      transform translate3d(100%,0,0)
     .image-header
       position relative
       width 100%
@@ -202,20 +225,20 @@ export default {
     .info
       padding 18px
       .tltle
-        font-size 14px   
+        font-size 14px
         color rgb(7,17,27)
         line-height 14px
         margin-bottom 6px
       .text
         line-height 24px
         padding  0 8px
-        font-size 12px 
+        font-size 12px
         font-weight 200
         color rgb(77,85,93)
     .rating
       padding-top 18px
       .title
-        font-size 14px   
+        font-size 14px
         color rgb(7,17,27)
         line-height 14px
         margin-left 18px
@@ -234,11 +257,11 @@ export default {
           .name
             display inline-block
             margin-right 6px
-            vertical-align top 
+            vertical-align top
             font-size 10px
             color rgb(147,153,159)
           .avatar
-            border-radius 50% 
+            border-radius 50%
         .time
           margin-bottom 6px
           line-height 12px
